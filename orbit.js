@@ -3,6 +3,8 @@ var mouseX, mouseY;
 var downTime, upTime;
 var mouseStatus="createOrbit";
 var playStatus="stop";
+var pointList = [];
+var orbitList = [];
 
 //キャンバスクリック時の挙動 ドラッグと区別のためdown-up
 $("#canvas").on('mousedown', function() {
@@ -15,13 +17,22 @@ $("#canvas").on('mouseup', function(e) {
         $('#jquery-ui-dialog').dialog('open');
         mouseX = e.offsetX;
         mouseY = e.offsetY;
+      }else if (mouseStatus == "createPlanet") {
+        $("canvas").drawEllipse({
+          strokeStyle: "white",
+          strokeWidth: 0.5,
+          // x,yは近くの円周の5刻みの部分で
+          width:20, height: 20,
+          draggable: true,
+          // updateDragX, Yもx, y同様     
+        })
       }
   }
 });
 
 //オービットの作成
 function createOrbit(size) {
-  orbitCount++;
+  orbitList.push(orbitCount);
   var name = "orbit" + orbitCount;
   $("canvas").drawEllipse({
     strokeStyle: "white",
@@ -36,12 +47,18 @@ function createOrbit(size) {
     name : "orbit" + orbitCount,
     click: function(layer) {
       if (mouseStatus == "delete") {
-        var grp = $("canvas").getLayer(layer).groups;
-        $("canvas").removeLayerGroup(grp[0]).drawLayers();
-        orbitCount--;
+        $("#canvas").trigger("deleteEvent", [$("canvas").getLayer(layer).groups, $("canvas").getLayer(layer).name]);
       }
     },
+    dragstop: function(layer) {
+      var orbit = $("canvas").getLayer(layer);
+      var num = parseInt(orbit.name);
+      pointList[num-1] = orbit.x;
+      pointList[num] = orbit.y;
+    }
   });
+  pointList.push(mouseX);
+  pointList.push(mouseY);
   $("canvas").drawEllipse({
     fillStyle: "white",
     x: mouseX,
@@ -56,15 +73,18 @@ function createOrbit(size) {
     name: "comet" + orbitCount,
     click: function(layer) {
       if (mouseStatus == "delete") {
-        var grp = $("canvas").getLayer(layer).groups;
-        $("canvas").removeLayerGroup(grp[0]).drawLayers();
-        orbitCount--;
+        $("#canvas").trigger("deleteEvent", [$("canvas").getLayer(layer).groups, $("canvas").getLayer(layer).name]);
       }
     },
   })
+  orbitCount++;
 }
 
 //ボタン
+$("#button-planet").on('click', function() {
+  mouseStatus="createPlanet";
+  $("#text-status").text("create planet mode");
+})
 $("#button-orbit").on('click', function() {
   mouseStatus="createOrbit";
   $("#text-status").text("create orbit mode");
@@ -84,19 +104,10 @@ $("#button-play").on("click", function() {
     $("#button-play").attr("src", "images/button-pause.png");
   }
 })
-/*
-$(document).on("click","#button-pause", function() {
-  playStatus="pause";
-  $("#canvas").trigger("stopEvent");
-  $("#button-pause").attr("src", "images/button-play.png");
-  $("#button-pause").attr("id", "button-play");
-})
-*/
 $("#button-stop").on("click", function() {
   playStatus="stop";
   $("#canvas").trigger("stopEvent");
 })
-
 
 //初期設定的な？
 $(function () {
@@ -127,35 +138,47 @@ $(function () {
   })
 });
 
-//リサイズ用？よくわからｎ
+//リサイズ用
 function sizing() {
   $("#canvas").attr({height:$("#wrap").height()});
   $("#canvas").attr({width:$("#wrap").width()});
 }
 
+//デリート
+$("#canvas").on("deleteEvent", function(e, grp, nam) {
+  var name = nam.replace(/[^0-9^\.]/g,"");
+  var num = parseInt(name);
+  var p = orbitList.indexOf(num);
+  orbitList.splice(p, 1);
+  $("canvas").removeLayerGroup(grp[0]).drawLayers();
+})
+
 //再生関連
 $("#canvas").on("playEvent", function() {
     setInterval(function() {
       if (playStatus=="play")
-        for (var i = 1; i <= orbitCount; i++) 
-          $("canvas").animateLayer("comet" + i, {
-            rotate: '+=360', 
-          }, 1000, "linear");
-    }, 1000);
+        $.each(orbitList, function(index, val) {
+          $("canvas").animateLayer("comet" + val, {
+            rotate: '+=5', 
+          }, 1000/72, "linear");
+        }) 
+    }, 1000/72);
     
     //window.requestAnimationFrame(revolution);
 })
 
 $("#canvas").on("stopEvent", function() {
-  for (var i = 1; i <= orbitCount; i++) {
-    $("canvas").stopLayer("comet" + i, true);
+  $.each(orbitList, function(i, val) {
+    $("canvas").stopLayer("comet" + val, true);
+    //console.log(Math.ceil($("canvas").getLayer("comet"+val).rotate % 360));
+    console.log(orbitList);
     if (playStatus == "stop") {
-      $("canvas").animateLayer("comet" + i, {
+      $("canvas").animateLayer("comet" + val, {
         rotate: 0
       }, 10, "linear");
       $("#button-play").attr("src", "images/button-play.png");
     }
-  }
+  })
 })
 
 //animation
