@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Orbit proto</title>
+        <link rel="stylesheet" href="orbit.css">
+        <meta charset="utf-8" />
+        <link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.min.css">
+        <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="jcanvas.min.js"></script>   
+        <script type="text/javascript" src="thread.min.js"></script>
+    </head>
+    <body>
+        <div id="wrap">
+        <canvas id="canvas"></canvas>
+        </div> 
+        <div id="text-status">create orbit mode</div>
+        <div id="button">
+            <input type="image" id="button-stop" src="images/button-stop.png" />
+            <input type="image" id="button-play" src="images/button-play.png" />
+            <input type="image" id="button-planet" src="button.gif" />
+            <input type="image" id="button-orbit" src="images/button-orbit.png"/>
+            <input type="image" id="button-delete" src="images/button-delete.png" />
+        </div>
+        <div id="jquery-ui-dialog" title="オービットの設定">
+            <p>直径:<input type="text" id="slider-val"/></p>
+            <div id="jquery-ui-slider"></div>
+            <button id="dialog-button">作成</button>
+        </div>
+        <script type="text/javascript" src="orbit.js"></script>
+    </body>
+</html>

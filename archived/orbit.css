@@ -1,0 +1,43 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+#wrap {
+    top: 0px;
+    width: 100%;
+    height: 85%;
+}
+
+#canvas {
+    background: #191970;
+}
+
+#jquery-ui-slider {
+    margin: 10px;
+}
+
+#button {
+    text-align: center;
+}
+       
+#button-orbit, #button-delete, #button-planet{
+    transform: scale(1.25) translate(0,-10px);
+    margin: 15px; 
+}
+
+#button-play, #button-stop, #button-pause{
+    transform: scale(1.3) translate(0,-12px);
+    margin: 10px;
+}
+
+#button-orbit:hover, #button-delete:hover, 
+#button-stop:hover, #button-play:hover,
+#button-pause:hover, #button-planet:hover {
+    opacity: 0.6;
+}
+
+#text-status {
+    text-align: right;
+}
