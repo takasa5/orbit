@@ -9,18 +9,28 @@
         <script src="p5.dom.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script src="bootstrap/bootstrap-slider.min.js"></script>
+        <script src="Tone.min.js"></script>
         <script src="orbit.js"></script>
     </head>
     <body>
-        <div class="container">
-        <div class="row" id="buttons">
-            <input class="col-1 col-sm-offset-3" type="image" id="button-stop" src="images/button-stop.png" width="70" height="70"/>
-            <input class="col-1" type="image" id="button-play" src="images/button-play.png" width="70" height="70" />
-            <input class="col-2" id="slider" data-slider-id="Slider" type="text" data-slider-min="50" data-slider-max="400" data-slider-step="10" data-slider-value="100"/>
-            <input class="col-1" type="image" id="button-planet" src="images/button-planet.png" width="70" height="70"/>
-            <input class="col-1" type="image" id="button-orbit" src="images/button-orbit.png" width="70" height="70"/>
-            <input class="col-1" type="image" id="button-delete" src="images/button-delete.png" width="70" height="70" />
-        </div>
+        <div class="container-fruid">
+            <div class="row">
+                <div class="col-12" id="addcanvas"></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-auto">
+                    <div class="row" id="buttons" style="width:100%">
+                        <center>
+                            <input class="col-2" type="image" id="button-stop" src="images/button-stop.png"/>
+                            <input class="col-2" type="image" id="button-play" src="images/button-play.png"/>
+                            <input class="col-2" id="slider" data-slider-id="Slider" type="text" data-slider-min="50" data-slider-max="400" data-slider-step="10" data-slider-value="100"/>
+                            <input class="col-2" type="image" id="button-planet" src="images/button-planet.png"/>
+                            <input class="col-2" type="image" id="button-orbit" src="images/button-orbit.png"/>
+                            <input class="col-2" type="image" id="button-delete" src="images/button-delete.png"/>
+                        </center>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

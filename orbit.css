@@ -4,34 +4,16 @@ canvas {
 
 body {
     overflow: hidden;
-}
-
-.container {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
-
-#buttons {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+    height: 100%;
 }
 
 #Slider .slider-selection{
     background: #4b8bf2;
 }
-
 #Slider {
-    transform: translateY(-40px);
+    transform: translateY(-50px);
+    width: 100px;
 }
-
-#button-orbit, #button-delete, 
-#button-stop, #button-play,
-#button-pause, #button-planet {
-    transform: translateY(-10px);
-} 
-
 
 #button-orbit:hover, #button-delete:hover, 
 #button-stop:hover, #button-play:hover,
