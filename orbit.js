@@ -1,28 +1,26 @@
 /// <reference path="p5.global-mode.d.ts" />
-orbitnum = 0;
+orbitnum = 0; planetnum = 0;
+orbitList = []; planetList = [];
 mode = "createOrbit";
 playmode = "stop";
-orbitList = [];
 myFrame = 0;
 //最初に実行
 function setup() {
-    createCanvas(windowWidth*0.985, windowHeight-100);
-    playButton = createButton("play");
-    playButton.position(windowWidth/3,windowHeight-50);
-    playButton.mousePressed(play);
-    stopButton = createButton("stop");
-    stopButton.position(windowWidth/3 + 60, windowHeight-50);
-    stopButton.mousePressed(stop);
-    orbitButton = createButton("orbit");
-    orbitButton.position(windowWidth/2 + 80, windowHeight-50);
-    orbitButton.mousePressed(function(){mode="createOrbit";});
-    deleteButton = createButton("delete");
-    deleteButton.position(windowWidth/2 + 140, windowHeight-50);
-    deleteButton.mousePressed(function(){mode="delete";});
-    sl = createSlider(10, 400, 100, 10);
-    sl.position(windowWidth/2 - 100,windowHeight-50);
-    sl.style("width", "150px");
+    createCanvas(windowWidth, windowHeight-100);
     background(19, 19, 70);
+    $("#button-planet").on('click', function() {
+    mode="createPlanet";
+    })
+    $("#button-orbit").on('click', function() {
+    mode="createOrbit";
+    })
+    $("#button-delete").on('click', function() {
+    mode="delete";
+    })
+    $("#button-play").on("click", play);
+    $("#button-stop").on("click", stop);
+    $("#slider").slider({
+    });
 }
 
 //常に待機、loop内容
@@ -30,8 +28,18 @@ function draw() {
     //mode
     if (mode == "delete") { //削除対象に色付け
         paintOrbit(0.5, 255, 94, 137);
-    }else{//ドラッグ対象
+        $("#button-delete").css({"filter": "hue-rotate(180deg)"});
+        $("#button-orbit").css({"filter": "hue-rotate(0deg)"});
+        $("#button-planet").css({"filter": "hue-rotate(0deg)"});
+    }else if (mode == "createOrbit"){//ドラッグ対象
         paintOrbit(0.2, 94, 131, 255);
+        $("#button-orbit").css({"filter": "hue-rotate(180deg)"});
+        $("#button-delete").css({"filter": "hue-rotate(0deg)"});
+        $("#button-planet").css({"filter": "hue-rotate(0deg)"});
+    }else if (mode == "createPlanet") {
+        $("#button-planet").css({"filter": "hue-rotate(180deg)"});
+        $("#button-orbit").css({"filter": "hue-rotate(0deg)"});
+        $("#button-delete").css({"filter": "hue-rotate(0deg)"});
     }
     //playmode
     if (playmode == "play") {
@@ -79,14 +87,9 @@ function paintOrbit(range, red, green, blue) {
     //}
 }
 
-//ウインドウリサイズ時　！オブジェクト再描画！
+//ウインドウリサイズ時
 function windowResized() {
-    resizeCanvas(windowWidth*0.985, windowHeight-100);
-    playButton.position(windowWidth/3,windowHeight-50);
-    stopButton.position(windowWidth/3 + 60, windowHeight-50);
-    orbitButton.position(windowWidth/2 + 80, windowHeight-50);
-    deleteButton.position(windowWidth/2 + 140, windowHeight-50);
-    sl.position(windowWidth/2 - 100,windowHeight-50);
+    resizeCanvas(windowWidth, windowHeight-100);
     revolveOrbit();
 }
 
@@ -95,44 +98,54 @@ function mouseReleased() {
     clickTime = millis() - pressedTime;
     if (mouseY < windowHeight-100 && clickTime < 250) {
         if (mode=="createOrbit") {
-            createOrbit(mouseX, mouseY, sl.value());
-        }else if (mode="delete") {
+            var R = $("#slider").slider('getValue');
+            createOrbit(mouseX, mouseY, R);
+        }else if (mode=="delete") {
             deleteOrbit(mouseX, mouseY);
+        }else if (mode=="createPlanet") {
+            createPlanet(mouseX, mouseY);
         }
     }
 }
 function mousePressed() {
     pressedTime = millis();
     var place = 0;
-    orbitList.forEach(function(val, i) {
-        if (mouseX < val.centerX+val.R*0.2 && mouseX > val.centerX-val.R*0.2 &&
-            mouseY < val.centerY+val.R*0.2 && mouseY > val.centerY-val.R*0.2) {
-            dragTarget = val; place++;
-        }
-    })
-    if (place == 0) 
+    if (mode=="createOrbit") {
+        orbitList.forEach(function(val, i) {
+            if (mouseX < val.centerX+val.R*0.2 && mouseX > val.centerX-val.R*0.2 &&
+                mouseY < val.centerY+val.R*0.2 && mouseY > val.centerY-val.R*0.2) {
+                dragTarget = val; place++;
+            }
+        })
+    }else{
+        planetList.forEach(function(val, i) {
+            if (mouseX < val.centerX+10 && mouseX > val.centerX-10 &&
+                mouseY < val.centerY+10 && mouseY > val.centerY-10) {
+                dragTarget = val; place++;
+            }
+        })
+    }
+    if (place == 0) //一個も判定重なってなければリセット
         dragTarget = null;
 }
 function mouseDragged() {
-    if (mode!="delete") {
+    if (mode=="createOrbit") {
+        dragTarget.centerX = mouseX; dragTarget.centerY = mouseY;
+        revolveOrbit();
+    } else if (mode=="createPlanet") {
         dragTarget.centerX = mouseX; dragTarget.centerY = mouseY;
         revolveOrbit();
     }
 }
-
+//再生関連
 function play() {
-    playmode="play";
-    playButton.remove();
-    playButton = createButton("pause");
-    playButton.position(windowWidth/3, windowHeight-50);
-    playButton.mousePressed(pause);
-}
-function pause() {
-    playmode="pause";
-    playButton.remove();
-    playButton = createButton("play");
-    playButton.position(windowWidth/3, windowHeight-50);
-    playButton.mousePressed(play);
+    if ($("#button-play").attr("src") == "images/button-play.png") {
+        playmode="play";
+        $("#button-play").attr("src", "images/button-pause.png");
+    }else{
+        playmode="pause";
+        $("#button-play").attr("src", "images/button-play.png");    
+    }
 }
 function stop() {
     playmode="stop";
@@ -153,6 +166,15 @@ function createOrbit(x, y, r) {
     ellipse(x, y, r);
     fill(255, 255, 255);
     ellipse(x, y-r/2, 20);
+    revolveOrbit();
+}
+
+function createPlanet(x, y) { //音のモードも？色とか
+    planet = {number: planetnum, centerX: x, centerY: y};
+    planetnum++;
+    append(planetList, planet);
+    stroke(0); fill(145, 255, 114);
+    ellipse(x, y, 20);
     revolveOrbit();
 }
 
@@ -177,8 +199,12 @@ function revolveOrbit() {
         fill(255, 255, 255);
         ellipse(val.centerX + (val.R/2)*cos(myFrame/100*TWO_PI - PI/2), val.centerY + (val.R/2)*sin(myFrame/100*TWO_PI - PI/2), 20);
     });
+    planetList.forEach(function(val, i) {
+        stroke(0); fill(145, 255, 114);
+        ellipse(val.centerX, val.centerY, 20);
+    })
 }
-
+/*
 function redrawOrbit() {
     background(19, 19, 70);
     orbitList.forEach(function(val, i) {
@@ -187,4 +213,4 @@ function redrawOrbit() {
         fill(255, 255, 255);
         ellipse(val.centerX, val.centerY-val.R/2, 20);
     });
-}
+}*/

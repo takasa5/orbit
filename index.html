@@ -1,11 +1,26 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="orbit.css" />
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="bootstrap/bootstrap-slider.min.css" />
+        <script src="jquery-3.2.1.min.js"></script>
         <script src="p5.min.js"></script>
         <script src="p5.dom.js"></script>
-        <link rel="stylesheet" type="text/css" href="orbit.css" />
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="bootstrap/bootstrap-slider.min.js"></script>
         <script src="orbit.js"></script>
     </head>
     <body>
+        <div class="container">
+        <div class="row" id="buttons">
+            <input class="col-1 col-sm-offset-3" type="image" id="button-stop" src="images/button-stop.png" width="70" height="70"/>
+            <input class="col-1" type="image" id="button-play" src="images/button-play.png" width="70" height="70" />
+            <input class="col-2" id="slider" data-slider-id="Slider" type="text" data-slider-min="50" data-slider-max="400" data-slider-step="10" data-slider-value="100"/>
+            <input class="col-1" type="image" id="button-planet" src="images/button-planet.png" width="70" height="70"/>
+            <input class="col-1" type="image" id="button-orbit" src="images/button-orbit.png" width="70" height="70"/>
+            <input class="col-1" type="image" id="button-delete" src="images/button-delete.png" width="70" height="70" />
+        </div>
+        </div>
     </body>
 </html>
