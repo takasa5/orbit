@@ -43,6 +43,9 @@ body {
 #radio-hho:hover {
     opacity: 0.6;
 }
+.btn-primary.active {
+    filter: grayscale(100%);
+}
 
 #button-orbit:hover, #button-delete:hover, 
 #button-stop:hover, #button-play:hover,

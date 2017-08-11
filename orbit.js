@@ -16,7 +16,8 @@ function setup() {
     if (navigator.userAgent.indexOf('iPhone') > 0 || navigator.userAgent.indexOf('Android') > 0) {
         planetSize = 40;
         minusCanvas = 300;
-        maxSize = 600;
+        maxSize = 300;
+        checkClick = 250;
         $("#slider").slider({
             value: 200,
             min: 80,
@@ -34,7 +35,8 @@ function setup() {
     }else{
         planetSize = 20;
         minusCanvas = 100;
-        maxSize = 400;
+        maxSize = 350;
+        checkClick = 250;
         $("#slider").slider({
             value: 100,
             min: 40,
@@ -166,12 +168,12 @@ function windowResized() {
 //マウスイベント
 function mouseReleased() {
     clickTime = millis() - pressedTime;
-    if (mouseY < windowHeight-minusCanvas && clickTime < 250) {
+    if (mouseY < windowHeight-minusCanvas && clickTime < checkClick) {
         if (mode=="createOrbit") {
             var R = $("#slider").slider('getValue');
             createOrbit(mouseX, mouseY, R);
         }else if (mode=="delete") {
-            deleteOrbit(mouseX, mouseY);
+            deleteObject(mouseX, mouseY);
         }else if (mode=="createPlanet") {
             createPlanet(mouseX, mouseY);
         }
@@ -228,19 +230,38 @@ function stop() {
 
 
 function createOrbit(x, y, r) {
-    orbit = {number: orbitnum, centerX: x, centerY: y, R:r};
-    comet = {number: orbitnum, centerX: x, centerY: y-r/2};
-    orbitnum++;
-    append(orbitList, orbit);
-    append(cometList, comet);
-    stroke(255); noFill();
-    ellipse(x, y, r);
-    fill(255, 255, 255);
-    ellipse(x, y-r/2, planetSize);
-    revolveOrbit();
+    var checkdbl = false;
+    for (var i = 0; i < orbitList.length; i++) {
+        if (x < orbitList[i].centerX + 5 && x > orbitList[i].centerX - 5 &&
+            y < orbitList[i].centerY + 5 && y > orbitList[i].centerY - 5) {
+            checkdbl = true;
+            break;
+        }
+    }
+    if (!checkdbl) {
+        orbit = {number: orbitnum, centerX: x, centerY: y, R:r};
+        comet = {number: orbitnum, centerX: x, centerY: y-r/2};
+        orbitnum++;
+        append(orbitList, orbit);
+        append(cometList, comet);
+        stroke(255); noFill();
+        ellipse(x, y, r);
+        fill(255, 255, 255);
+        ellipse(x, y-r/2, planetSize);
+        revolveOrbit();
+    }
 }
 
 function createPlanet(x, y) {
+    var checkdbl = false;
+    for (var i = 0; i < planetList.length; i++) {
+        if (x < planetList[i].centerX + 5 && x > planetList[i].centerX - 5 &&
+            y < planetList[i].centerY + 5 && y > planetList[i].centerY - 5) {
+            checkdbl = true;
+            break;
+        }
+    }
+    if (!checkdbl) {
     var sampler, pcolor;
     if (planetMode == "snare") {
         sampler = snareSound;
@@ -261,9 +282,10 @@ function createPlanet(x, y) {
     stroke(0); fill(red, green, blue);
     ellipse(x, y, planetSize);
     revolveOrbit();
+    }
 }
 
-function deleteOrbit(x, y) {
+function deleteObject(x, y) {
     var valList = [];
     orbitList.forEach(function(val, i) {
         if (x < val.centerX+val.R*0.5 && x > val.centerX-val.R*0.5 &&
