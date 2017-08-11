@@ -9,6 +9,10 @@ planetMode = "snare";
 //最初に実行
 function setup() {
     bgColor = color(19, 19, 70);
+    snareSound = new Tone.Sampler("./audio/snare.mp3").toMaster();
+    kickSound = new Tone.Sampler("./audio/kick.mp3").toMaster();
+    hhSound = new Tone.Sampler("./audio/hh.mp3").toMaster();
+    hhcSound = new Tone.Sampler("./audio/hhc.mp3").toMaster();
     if (navigator.userAgent.indexOf('iPhone') > 0 || navigator.userAgent.indexOf('Android') > 0) {
         planetSize = 40;
         minusCanvas = 300;
@@ -195,12 +199,14 @@ function mousePressed() {
         dragTarget = null;
 }
 function mouseDragged() {
-    if (mode=="createOrbit") {
-        dragTarget.centerX = mouseX; dragTarget.centerY = mouseY;
-        revolveOrbit();
-    } else if (mode=="createPlanet") {
-        dragTarget.centerX = mouseX; dragTarget.centerY = mouseY;
-        revolveOrbit();
+    if (dragTarget != null) {
+        if (mode=="createOrbit") {
+            dragTarget.centerX = mouseX; dragTarget.centerY = mouseY;
+            revolveOrbit();
+        } else if (mode=="createPlanet") {
+            dragTarget.centerX = mouseX; dragTarget.centerY = mouseY;
+            revolveOrbit();
+        }
     }
 }
 //再生関連
@@ -237,16 +243,16 @@ function createOrbit(x, y, r) {
 function createPlanet(x, y) {
     var sampler, pcolor;
     if (planetMode == "snare") {
-        sampler = new Tone.Sampler("./audio/snare.mp3").toMaster();
+        sampler = snareSound;
         pcolor = color(145, 255, 114);
     }else if (planetMode == "kick") {
-        sampler = new Tone.Sampler("./audio/kick.mp3").toMaster();
+        sampler = kickSound;
         pcolor = color(156, 99, 255);
     }else if (planetMode == "hh") {
-        sampler = new Tone.Sampler("./audio/hh.mp3").toMaster();
+        sampler = hhSound;
         pcolor = color(255, 251, 140);
     }else if (planetMode == "hho") {
-        sampler = new Tone.Sampler("./audio/hho.mp3").toMaster();
+        sampler = hhcSound;
         pcolor = color(255, 140, 140);
     }
     planet = {number: planetnum, centerX: x, centerY: y, check: new Array(256), color: pcolor, sound: sampler};
