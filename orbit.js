@@ -12,7 +12,7 @@ function setup() {
     snareSound = new Tone.Sampler("./audio/snare.mp3").toMaster();
     kickSound = new Tone.Sampler("./audio/kick.mp3").toMaster();
     hhSound = new Tone.Sampler("./audio/hh.mp3").toMaster();
-    hhcSound = new Tone.Sampler("./audio/hhc.mp3").toMaster();
+    hhoSound = new Tone.Sampler("./audio/hho.mp3").toMaster();
     if (navigator.userAgent.indexOf('iPhone') > 0 || navigator.userAgent.indexOf('Android') > 0) {
         planetSize = 40;
         minusCanvas = 300;
@@ -252,7 +252,7 @@ function createPlanet(x, y) {
         sampler = hhSound;
         pcolor = color(255, 251, 140);
     }else if (planetMode == "hho") {
-        sampler = hhcSound;
+        sampler = hhoSound;
         pcolor = color(255, 140, 140);
     }
     planet = {number: planetnum, centerX: x, centerY: y, check: new Array(256), color: pcolor, sound: sampler};
