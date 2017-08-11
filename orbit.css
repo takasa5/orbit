@@ -14,6 +14,35 @@ body {
     transform: translateY(-50px);
     width: 100px;
 }
+#planetRadio {
+    transform: translateY(-50px);
+}
+
+#radio-snare {
+    background-color: rgb(144, 255, 114);
+}
+#radio-snare:hover {
+    opacity: 0.6;
+}
+#radio-kick {
+    background-color: rgb(156, 99, 255);
+}
+#radio-kick:hover {
+    opacity: 0.6;
+}
+#radio-hh {
+    color: black;
+    background-color: rgb(255, 251, 140);
+}
+#radio-hh:hover {
+    opacity: 0.6;
+}
+#radio-hho {
+    background-color: rgb(255, 140, 140);
+}
+#radio-hho:hover {
+    opacity: 0.6;
+}
 
 #button-orbit:hover, #button-delete:hover, 
 #button-stop:hover, #button-play:hover,

@@ -4,11 +4,10 @@ orbitList = []; planetList = [], cometList = [], effectList = [];
 mode = "createOrbit";
 playmode = "stop";
 myFrame = 0;
+planetMode = "snare";
 
 //最初に実行
 function setup() {
-    sampler = new Tone.Sampler("./audio/snare.mp3").toMaster();
-    //sampler = new Tone.FMSynth().toMaster();
     bgColor = color(19, 19, 70);
     if (navigator.userAgent.indexOf('iPhone') > 0 || navigator.userAgent.indexOf('Android') > 0) {
         planetSize = 40;
@@ -37,21 +36,30 @@ function setup() {
             min: 40,
             max: 400,
         });
+        $("#slider2").slider({
+            value: 100,
+            min: 10,
+            max: 100,
+        });
     }
     createCanvas(windowWidth, windowHeight-minusCanvas).parent("addcanvas");
     background(bgColor);
     $("#button-planet").on('click', function() {
     mode="createPlanet";
+    $("#Slider").hide();
+    $("#planetRadio").show();
     })
     $("#button-orbit").on('click', function() {
     mode="createOrbit";
+    $("#Slider").show();
+    $("#planetRadio").hide();
     })
     $("#button-delete").on('click', function() {
     mode="delete";
     })
     $("#button-play").on("click", play);
     $("#button-stop").on("click", stop);
-    
+    $("#planetRadio").hide();
 }
 
 //常に待機、loop内容
@@ -83,6 +91,13 @@ function draw() {
     }
 }
 
+//jQueryによる監視
+$(function() {
+    $("#planetRadio input[type=radio]").change(function() {
+        planetMode = this.value;
+    });
+})
+
 
 //音
 function checkCollision() {
@@ -92,7 +107,7 @@ function checkCollision() {
                 pval.centerY < cval.centerY+planetSize/3 && pval.centerY > cval.centerY-planetSize/3) {
                 if (pval.check[cval.number] == false) {
                     pval.check[cval.number] = true;
-                    sampler.triggerAttackRelease(0,"8n");
+                    pval.sound.triggerAttackRelease(0,"8n");
                     append(effectList, {centerX: pval.centerX, centerY: pval.centerY, color: pval.color, size:planetSize});
                 }
             }else{
@@ -154,7 +169,7 @@ function mouseReleased() {
         }else if (mode=="delete") {
             deleteOrbit(mouseX, mouseY);
         }else if (mode=="createPlanet") {
-            createPlanet(mouseX, mouseY, 145, 255, 114);
+            createPlanet(mouseX, mouseY);
         }
     }
 }
@@ -219,8 +234,22 @@ function createOrbit(x, y, r) {
     revolveOrbit();
 }
 
-function createPlanet(x, y, red, green, blue) { //音のモードも？色とか
-    planet = {number: planetnum, centerX: x, centerY: y, check: new Array(256), color: color(red,green,blue)};
+function createPlanet(x, y) {
+    var sampler, pcolor;
+    if (planetMode == "snare") {
+        sampler = new Tone.Sampler("./audio/snare.mp3").toMaster();
+        pcolor = color(145, 255, 114);
+    }else if (planetMode == "kick") {
+        sampler = new Tone.Sampler("./audio/kick.mp3").toMaster();
+        pcolor = color(156, 99, 255);
+    }else if (planetMode == "hh") {
+        sampler = new Tone.Sampler("./audio/hh.mp3").toMaster();
+        pcolor = color(255, 251, 140);
+    }else if (planetMode == "hho") {
+        sampler = new Tone.Sampler("./audio/hho.mp3").toMaster();
+        pcolor = color(255, 140, 140);
+    }
+    planet = {number: planetnum, centerX: x, centerY: y, check: new Array(256), color: pcolor, sound: sampler};
     planetnum++;
     append(planetList, planet);
     stroke(0); fill(red, green, blue);

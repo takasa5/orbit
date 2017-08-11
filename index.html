@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="orbit.css" />
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="bootstrap/bootstrap-slider.min.css" />
+        <link rel="stylesheet" type="text/css" href="orbit.css" />
         <script src="jquery-3.2.1.min.js"></script>
         <script src="p5.min.js"></script>
         <script src="p5.dom.js"></script>
@@ -23,7 +23,23 @@
                         <center>
                             <input class="col-2" type="image" id="button-stop" src="images/button-stop.png"/>
                             <input class="col-2" type="image" id="button-play" src="images/button-play.png"/>
-                            <input class="col-2" id="slider" data-slider-id="Slider" type="text" data-slider-min="50" data-slider-max="400" data-slider-step="10" data-slider-value="100"/>
+                            <span class="col-2">
+                                <input id="slider" data-slider-id="Slider" type="text" data-slider-min="50" data-slider-max="400" data-slider-step="10" data-slider-value="100"/>
+                                <div id="planetRadio" class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-primary active" id="radio-snare">
+                                        <input type="radio" autocomplete="off" value="snare">S
+                                    </label>
+                                    <label class="btn btn-primary" id="radio-kick">
+                                        <input type="radio" autocomplete="off" value="kick">K
+                                    </label>
+                                    <label class="btn btn-primary" id="radio-hh">
+                                        <input type="radio" autocomplete="off" value="hh">Hc
+                                    </label>
+                                    <label class="btn btn-primary" id="radio-hho">
+                                        <input type="radio" autocomplete="off" value="hho">Ho
+                                    </label>
+                                </div>
+                            </span>
                             <input class="col-2" type="image" id="button-planet" src="images/button-planet.png"/>
                             <input class="col-2" type="image" id="button-orbit" src="images/button-orbit.png"/>
                             <input class="col-2" type="image" id="button-delete" src="images/button-delete.png"/>
