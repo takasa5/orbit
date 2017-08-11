@@ -7,8 +7,9 @@ myFrame = 0;
 
 //最初に実行
 function setup() {
+    sampler = new Tone.Sampler("./audio/snare.mp3").toMaster();
+    //sampler = new Tone.FMSynth().toMaster();
     bgColor = color(19, 19, 70);
-    synth = new Tone.FMSynth().toMaster();
     if (navigator.userAgent.indexOf('iPhone') > 0 || navigator.userAgent.indexOf('Android') > 0) {
         planetSize = 40;
         minusCanvas = 300;
@@ -55,6 +56,15 @@ function setup() {
 
 //常に待機、loop内容
 function draw() {
+    //playmode
+    if (playmode == "play") {
+        //動いてるときにも色付け
+        checkCollision();
+        revolveOrbit();
+        myFrame++;
+    }else{
+        revolveOrbit();
+    }
     //mode
     if (mode == "delete") { //削除対象に色付け
         paintOrbit(0.5, 255, 94, 137);
@@ -71,21 +81,8 @@ function draw() {
         $("#button-orbit").css({"filter": "hue-rotate(0deg)"});
         $("#button-delete").css({"filter": "hue-rotate(0deg)"});
     }
-    //playmode
-    if (playmode == "play") {
-        revolveOrbit();
-        //動いてるときにも色付け
-        if (mode == "delete") {
-            paintOrbit(0.5, 255, 94, 137);
-        }else if (mode == "createOrbit"){
-            paintOrbit(0.2, 94, 131, 255);
-        }
-        checkCollision();
-        myFrame++;
-    }else{
-        revolveOrbit();
-    }
 }
+
 
 //音
 function checkCollision() {
@@ -95,7 +92,7 @@ function checkCollision() {
                 pval.centerY < cval.centerY+planetSize/3 && pval.centerY > cval.centerY-planetSize/3) {
                 if (pval.check[cval.number] == false) {
                     pval.check[cval.number] = true;
-                    synth.triggerAttackRelease("G3", "8n");
+                    sampler.triggerAttackRelease(0,"8n");
                     append(effectList, {centerX: pval.centerX, centerY: pval.centerY, color: pval.color, size:planetSize});
                 }
             }else{
