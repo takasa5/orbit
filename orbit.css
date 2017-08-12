@@ -7,13 +7,20 @@ body {
     height: 100%;
 }
 
-#Slider .slider-selection{
+#Slider .slider-selection, #Slider2 .slider-selection{
     background: #4b8bf2;
 }
-#Slider {
-    transform: translateY(-50px);
-    width: 100px;
+#Slider{
+    transform: translateY(-60px);
+    width: 100px; /*伸ばしたのでスマホで崩れるときは縮めること*/
 }
+
+#Slider2 {
+    position: absolute;
+    transform: translate(-95px, 50px);
+    width: 80px;
+}
+
 #planetRadio {
     transform: translateY(-50px);
 }
