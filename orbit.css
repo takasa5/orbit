@@ -21,7 +21,7 @@ body {
     width: 80px;
 }
 
-#planetRadio {
+#planetRadio, #deleteRadio {
     transform: translateY(-50px);
 }
 
