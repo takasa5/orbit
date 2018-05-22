@@ -137,6 +137,7 @@ function draw() {
         $("#button-orbit").css({"filter": "hue-rotate(0deg)"});
         $("#button-delete").css({"filter": "hue-rotate(0deg)"});
     }
+    revolveAstar();
 }
 
 //音
@@ -468,7 +469,7 @@ function revolveOrbit() {
         cometList[val.number].centerY = comet.centerY;
         fill(bgColor);
         ellipse(comet.centerX, comet.centerY, planetSize);
-
+        /*
         if (astarList[val.number].deg >= 359)
             astarList[val.number].deg = 0;
         else
@@ -478,7 +479,7 @@ function revolveOrbit() {
         translate(val.centerX, val.centerY); rotate(rad); ellipse(0, 0, 10, 20); rotate(-rad); translate(-val.centerX,-val.centerY);
         translate(val.centerX, val.centerY); rotate(PI/3 + rad); ellipse(0, 0, 10, 20); rotate(-PI/3-rad); translate(-val.centerX,-val.centerY);
         translate(val.centerX, val.centerY); rotate(2*PI/3 + rad); ellipse(0, 0, 10, 20); rotate(-2*PI/3-rad); translate(-val.centerX, -val.centerY);
-        
+        */
     });
     planetList.forEach(function(val, i) {
         stroke(val.color); strokeWeight(3); fill(val.color);
@@ -494,4 +495,18 @@ function revolveOrbit() {
         stroke(255, 94, 137); fill(color(255, 94, 137, 50));
         rect(deleteArea.x1, deleteArea.y1, deleteArea.x2, deleteArea.y2);    
     }
+}
+
+function revolveAstar() {
+    orbitList.forEach(function(val, i) {
+        if (astarList[val.number].deg >= 359)
+            astarList[val.number].deg = 0;
+        else
+            astarList[val.number].deg += astarList[val.number].speed;
+        var rad = astarList[val.number].deg*PI/180;
+        stroke(200,0,0); strokeWeight(2); noFill();
+        translate(val.centerX, val.centerY); rotate(rad); ellipse(0, 0, 10, 20); rotate(-rad); translate(-val.centerX,-val.centerY);
+        translate(val.centerX, val.centerY); rotate(PI/3 + rad); ellipse(0, 0, 10, 20); rotate(-PI/3-rad); translate(-val.centerX,-val.centerY);
+        translate(val.centerX, val.centerY); rotate(2*PI/3 + rad); ellipse(0, 0, 10, 20); rotate(-2*PI/3-rad); translate(-val.centerX, -val.centerY);
+    })
 }
